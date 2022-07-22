@@ -3,7 +3,7 @@ package update
 import (
 	"fmt"
 
-	"github.com/machine-node-linker/manage-package/pkg/lib/schema/pkg"
+	"github.com/machine-node-linker/manage-package/pkg/lib/schema"
 	"github.com/spf13/cobra"
 )
 
@@ -12,18 +12,18 @@ func Run(cmd *cobra.Command, _ []string) error {
 	icon, _ := cmd.Flags().GetString("icon")
 	description, _ := cmd.Flags().GetString("description")
 
-	pkgobj, err := pkg.LoadFile(file)
+	pkg, err := schema.LoadPackageFile(file)
 	if err != nil {
 		return fmt.Errorf("Unable to load file: %w", err)
 	}
 	if icon != "" {
-		pkgobj.AddIcon(icon)
+		pkg.AddIcon(icon)
 	}
 	if description != "" {
-		pkgobj.AddDescription(description)
+		pkg.AddDescription(description)
 	}
 
-	if err = pkgobj.WriteToFile(file); err != nil {
+	if err = pkg.WriteToFile(file); err != nil {
 		return fmt.Errorf("Unable to write package file: %w", err)
 	}
 
