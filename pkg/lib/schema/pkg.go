@@ -33,6 +33,10 @@ func (p *Package) AddIcon(filename string) error {
 		return fmt.Errorf("read icon: %v", err)
 	}
 
+	if len(iconData) == 0 {
+		return nil
+	}
+
 	iconType, err := filetype.Match(iconData)
 	if err != nil {
 		return fmt.Errorf("detect icon mediatype: %v", err)
@@ -54,6 +58,10 @@ func (p *Package) AddDescription(filename string) error {
 	descriptionData, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("read description: %v", err)
+	}
+
+	if len(descriptionData) == 0 {
+		return nil
 	}
 
 	p.Description = string(descriptionData)

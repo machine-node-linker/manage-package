@@ -16,11 +16,19 @@ func Run(cmd *cobra.Command, _ []string) error {
 	if err != nil {
 		return fmt.Errorf("Unable to load file: %w", err)
 	}
+
 	if icon != "" {
-		pkg.AddIcon(icon)
+		err = pkg.AddIcon(icon)
+		if err != nil {
+			return fmt.Errorf("Unable to add icon: %w", err)
+		}
 	}
+
 	if description != "" {
-		pkg.AddDescription(description)
+		err = pkg.AddDescription(description)
+		if err != nil {
+			return fmt.Errorf("Unable to add description: %w", err)
+		}
 	}
 
 	if err = pkg.WriteToFile(file); err != nil {
