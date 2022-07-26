@@ -12,7 +12,7 @@ type ErrorWriter struct {
 }
 
 func (ErrorWriter) Write(p []byte) (int, error) {
-	n, err := fmt.Printf("$ErrorCommand%s", p)
+	n, err := fmt.Printf("%s%s", ErrorCommand, p)
 
 	if n < len(ErrorCommand) {
 		n = 0
