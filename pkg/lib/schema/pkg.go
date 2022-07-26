@@ -21,7 +21,7 @@ func LoadPackageFile(filename string) (*Package, error) {
 	}
 
 	if err := json.Unmarshal(f, &p); err != nil {
-		return nil, fmt.Errorf("parse package: %v", err)
+		return nil, fmt.Errorf("parse package: %v: %s", err, f)
 	}
 
 	return p, nil
