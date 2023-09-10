@@ -3,8 +3,8 @@ linters:
   enable:
     - wrapcheck
     - wsl
-    - golint
     - gomoddirectives
+    - revive
     - gocritic
     - gosimple
     - errcheck
@@ -13,7 +13,6 @@ linters:
     - staticcheck
     - typecheck
     - unused
-    - varcheck
     - goconst
     - gofmt
     - gomnd
