@@ -3,4 +3,4 @@ ENTRYPOINT [ "/manage-package" ]
 COPY manage-package /
 
 ARG VERSION
-ENV VERSION=${VERSION:dev}
+ENV VERSION=${VERSION:-dev}
