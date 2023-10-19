@@ -20,7 +20,7 @@ func CheckFileVar(filename *string) error {
 }
 
 func debugLogPaths() {
-	root := "/"
+	root := "."
 	fileSystem := os.DirFS(root)
 
 	if err := fs.WalkDir(fileSystem, ".", func(path string, _ fs.DirEntry, err error) error {
