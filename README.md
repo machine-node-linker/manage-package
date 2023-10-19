@@ -4,14 +4,14 @@ CLI to create and manage package schema files for operator-framework/operator-re
 
 ```
 Usage:
-  manage-package [command]
-
-Available Commands:
-  update      update package file
-  help        Help about any command
+  manage-package update --file filename  [flags]
 
 Flags:
-  -h, --help   help for manage-package
+  -d, --description string   description file to add to package
+  -f, --file string          package file
+  -h, --help                 help for update
+  -i, --icon string          icon file to add to package
 
-Use "manage-package [command] --help" for more information about a command.
+Global Flags:
+  -v, --verbose   verbose output   
 ```
