@@ -6,6 +6,8 @@ import (
 )
 
 const ErrorCommand = "::error::"
+const DebugCommand = "::debug::"
+const GithubLogFlag = 0
 
 type ErrorWriter struct {
 	io.Writer
