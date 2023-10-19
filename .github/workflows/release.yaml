@@ -48,6 +48,8 @@ jobs:
           context: ./dist/
           oci: true
           image: manage-package
+          build-args: |
+            VERSION=${{steps.release.outputs.version}}
           tags: |
             latest
             v${{steps.release.outputs.version_major}} 
