@@ -14,6 +14,9 @@ func main() {
 	if _, ok := os.LookupEnv("GITHUB_ACTIONS"); ok {
 		cmd.SetErr(github.ErrorWriter{})
 		log.Debug.SetPrefix(github.DebugCommand)
+
+		// Always write debug logs in github actions.
+		log.Debug.SetOutput(os.Stdout)
 		log.Debug.SetFlags(github.GithubLogFlag)
 		log.Info.SetFlags(github.GithubLogFlag)
 	}
