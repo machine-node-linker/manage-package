@@ -2,11 +2,12 @@ package update
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 
+	flags "github.com/machine-node-linker/manage-package/pkg/cmd"
 	"github.com/machine-node-linker/manage-package/pkg/cmd/update"
+	"github.com/machine-node-linker/manage-package/pkg/lib/file"
 )
 
 func NewCMD() *cobra.Command {
@@ -14,25 +15,11 @@ func NewCMD() *cobra.Command {
 		Use:   "update --file filename ",
 		Short: "update olm.package schema file",
 		Long:  "CLI to update olm.package schema file for operator-framework/operator-registry",
-		PreRunE: func(cmd *cobra.Command, _ []string) error {
-			file, _ := cmd.Flags().GetString("file")
-
-			if _, err := os.Stat(file); err != nil {
-				return fmt.Errorf("unable to read file: %w", err)
-			}
-			icon, _ := cmd.Flags().GetString("icon")
-
-			if _, err := os.Stat(icon); icon != "" && err != nil {
-				return fmt.Errorf("unable to read file: %w", err)
-			}
-			description, _ := cmd.Flags().GetString("description")
-
-			if _, err := os.Stat(description); description != "" && err != nil {
-				return fmt.Errorf("unable to read file: %w", err)
-			}
-
-			if icon == "" && description == "" {
-				return fmt.Errorf("one of --icon or --description must be preset")
+		PreRunE: func(_ *cobra.Command, _ []string) error {
+			for _, filename := range flags.UpdateFiles {
+				if err := file.CheckFileVar(filename); err != nil {
+					return fmt.Errorf("file error: %w", err)
+				}
 			}
 			return nil
 		},
@@ -40,9 +27,9 @@ func NewCMD() *cobra.Command {
 		RunE: update.Run,
 	}
 
-	cmd.Flags().StringP("icon", "i", "", "icon file to add to package")
-	cmd.Flags().StringP("description", "d", "", "description file to add to package")
-	cmd.Flags().StringP("file", "f", "", "package file")
+	cmd.Flags().StringVarP(&flags.IconFile, "icon", "i", "", "icon file to add to package")
+	cmd.Flags().StringVarP(&flags.DescriptionFile, "description", "d", "", "description file to add to package")
+	cmd.Flags().StringVarP(&flags.PackageFile, "file", "f", "", "package file")
 
 	cmd.MarkFlagRequired("file")
 	cmd.MarkFlagFilename("file")
