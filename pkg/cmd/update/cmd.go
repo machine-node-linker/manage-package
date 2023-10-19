@@ -3,35 +3,43 @@ package update
 import (
 	"fmt"
 
+	flags "github.com/machine-node-linker/manage-package/pkg/cmd"
 	"github.com/machine-node-linker/manage-package/pkg/lib/schema"
+	"github.com/machine-node-linker/manage-package/pkg/log"
 	"github.com/spf13/cobra"
 )
 
-func Run(cmd *cobra.Command, _ []string) error {
-	file, _ := cmd.Flags().GetString("file")
-	icon, _ := cmd.Flags().GetString("icon")
-	description, _ := cmd.Flags().GetString("description")
-
-	pkg, err := schema.LoadPackageFile(file)
+func Run(_ *cobra.Command, _ []string) error {
+	pkg, err := schema.LoadPackageFile(&flags.PackageFile)
 	if err != nil {
 		return fmt.Errorf("Unable to load file: %w", err)
 	}
 
-	if icon != "" {
-		err = pkg.AddIcon(icon)
+	switch {
+	case flags.IconFile != "":
+		err = pkg.AddIcon(&flags.IconFile)
 		if err != nil {
 			return fmt.Errorf("Unable to add icon: %w", err)
 		}
+	case pkg.Icon != nil:
+		log.Debug.Println("Iconfile not specified, using existing Package icon")
+	default:
+		log.Debug.Println("Iconfile not specified and not set in existing Package")
 	}
 
-	if description != "" {
-		err = pkg.AddDescription(description)
+	switch {
+	case flags.DescriptionFile != "":
+		err = pkg.AddDescription(&flags.DescriptionFile)
 		if err != nil {
 			return fmt.Errorf("Unable to add description: %w", err)
 		}
+	case pkg.Description != "":
+		log.Debug.Println("Descripton file not specified, using existing Package description")
+	default:
+		return fmt.Errorf("Desciption file not specified and not set in existing package")
 	}
 
-	if err = pkg.WriteToFile(file); err != nil {
+	if err = pkg.WriteToFile(&flags.PackageFile); err != nil {
 		return fmt.Errorf("Unable to write package file: %w", err)
 	}
 
